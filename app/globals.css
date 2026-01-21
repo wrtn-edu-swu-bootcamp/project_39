@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-text-primary;
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Noto Sans KR',
+      'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* All Clear 반짝임 효과 */
+@keyframes shimmer {
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.8;
+  }
+}
+
+.all-clear-shimmer {
+  animation: shimmer 2s ease-in-out infinite;
+}
