@@ -57,9 +57,9 @@ export default async function GroupsPage() {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">그룹</h1>
+    <div className="container mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-3xl font-bold text-text-primary">그룹</h1>
         {session && (
           <div className="flex gap-2">
             <Link href="/groups/explore">
@@ -88,7 +88,7 @@ export default async function GroupsPage() {
       {session ? (
         <>
           {myGroups.length > 0 ? (
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
               {myGroups.map((group) => (
                 <GroupCard key={group.id} group={group} />
               ))}

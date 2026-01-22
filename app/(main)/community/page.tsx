@@ -65,9 +65,9 @@ export default async function CommunityPage() {
   })
 
   return (
-    <div className="container mx-auto p-4">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">취미공유방</h1>
+    <div className="container mx-auto max-w-4xl px-4 py-6 md:px-6 md:py-8">
+      <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <h1 className="text-3xl font-bold text-text-primary">취미공유방</h1>
         {session ? (
           hasPostedToday ? (
             <Button variant="secondary" size="sm" disabled className="opacity-60">
@@ -91,12 +91,12 @@ export default async function CommunityPage() {
         )}
       </div>
 
-      <div className="space-y-4">
+      <div className="space-y-6">
         {posts.map((post) => (
           <Card key={post.id}>
             <CardContent className="pt-6">
               <div className="flex items-start gap-4">
-                <div className="h-10 w-10 flex-shrink-0 rounded-full bg-gray-200" />
+                <div className="h-12 w-12 flex-shrink-0 rounded-full bg-gradient-to-br from-primary/20 to-primary/10 border border-primary/20" />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
                     <span className="font-medium">{post.author.nickname}</span>
@@ -111,12 +111,12 @@ export default async function CommunityPage() {
                   </Link>
                   {post.imageUrl && (
                     <Link href={`/community/${post.id}`}>
-                      <div className="relative mt-4 h-48 w-full overflow-hidden rounded-lg">
+                      <div className="relative mt-4 h-64 md:h-80 w-full overflow-hidden rounded-xl">
                         <Image
                           src={post.imageUrl}
                           alt=""
                           fill
-                          className="object-cover cursor-pointer"
+                          className="object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
                         />
                       </div>
                     </Link>

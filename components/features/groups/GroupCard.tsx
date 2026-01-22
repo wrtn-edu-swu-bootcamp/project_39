@@ -26,24 +26,26 @@ export default function GroupCard({ group }: GroupCardProps) {
   const isFull = memberCount >= group.maxMembers
 
   return (
-    <Link href={`/groups/${group.id}/posts`}>
-      <Card className="transition-shadow hover:shadow-md">
+    <Link href={`/groups/${group.id}/posts`} className="block h-full">
+      <Card className="h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1">
         {group.imageUrl && (
-          <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+          <div className="relative h-56 w-full overflow-hidden rounded-t-xl">
             <Image
               src={group.imageUrl}
               alt={group.name}
               fill
-              className="object-cover"
+              className="object-cover transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         )}
         <CardHeader>
-          <h3 className="text-lg font-semibold">{group.name}</h3>
-          <p className="text-sm text-text-secondary">{group.topic}</p>
+          <h3 className="text-xl font-semibold text-text-primary group-hover:text-primary transition-colors">
+            {group.name}
+          </h3>
+          <p className="text-sm text-text-secondary mt-1">{group.topic}</p>
         </CardHeader>
         <CardContent>
-          <div className="space-y-2 text-sm">
+          <div className="space-y-3 text-sm">
             <p className="text-text-tertiary">
               기간: {formatDate(group.startDate)} ~ {formatDate(group.endDate)}
             </p>

@@ -10,7 +10,7 @@ export default async function MainLayout({ children }: { children: React.ReactNo
   return (
     <div className="flex min-h-screen flex-col">
       {!session && <GuestBanner />}
-      <main className="flex-1 pb-16">{children}</main>
+      <main className="flex-1 pt-16 md:pt-20 pb-16 md:pb-0">{children}</main>
       <BottomNav />
     </div>
   )

@@ -16,12 +16,12 @@ export default function GuestBanner() {
   }
 
   return (
-    <div className="bg-primary/10 border-b border-border px-4 py-3">
-      <div className="container mx-auto flex items-center justify-between">
+    <div className="bg-primary/10 border-b border-border px-4 py-3 md:py-4">
+      <div className="container mx-auto max-w-7xl flex items-center justify-between">
         <div className="flex-1">
-          <p className="text-sm text-text-primary">
+          <p className="text-sm md:text-base text-text-primary">
             비회원 모드로 이용 중입니다.{' '}
-            <Link href="/login" className="text-primary hover:underline font-medium">
+            <Link href="/login" className="text-primary hover:underline font-medium transition-colors">
               로그인
             </Link>
             {' 하면 더 많은 기능을 이용할 수 있습니다.'}
@@ -30,7 +30,7 @@ export default function GuestBanner() {
         <Button
           variant="text"
           size="sm"
-          className="ml-4 h-auto p-1"
+          className="ml-4 h-auto p-1 hover:bg-primary/10 rounded-full"
           onClick={() => setIsVisible(false)}
           aria-label="배너 닫기"
         >
