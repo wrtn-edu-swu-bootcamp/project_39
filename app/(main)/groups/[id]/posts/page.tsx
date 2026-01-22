@@ -7,14 +7,15 @@ import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import PostGrid from '@/components/features/posts/PostGrid'
 
-export default async function GroupPostsPage({ params }: { params: { id: string } }) {
+export default async function GroupPostsPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   if (!session) {
     redirect('/login')
   }
+  const { id } = await params
 
   const group = await db.group.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       members: {
         where: {
@@ -31,12 +32,12 @@ export default async function GroupPostsPage({ params }: { params: { id: string 
   const isMember = group.members.some((m) => m.userId === session.user.id)
 
   if (!isMember) {
-    redirect(`/groups/${params.id}`)
+    redirect(`/groups/${id}`)
   }
 
   const posts = await db.post.findMany({
     where: {
-      groupId: params.id,
+      groupId: id,
       isDeleted: false,
     },
     include: {
@@ -65,7 +66,7 @@ export default async function GroupPostsPage({ params }: { params: { id: string 
 
   const todayPosts = await db.post.findMany({
     where: {
-      groupId: params.id,
+      groupId: id,
       postedAt: {
         gte: today,
         lt: tomorrow,
@@ -89,7 +90,7 @@ export default async function GroupPostsPage({ params }: { params: { id: string 
     <div className="container mx-auto p-4">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <Link href={`/groups/${params.id}`} className="text-primary hover:underline">
+          <Link href={`/groups/${id}`} className="text-primary hover:underline">
             ← 그룹 정보
           </Link>
           <h1 className="mt-2 text-2xl font-bold">{group.name}</h1>
@@ -100,7 +101,7 @@ export default async function GroupPostsPage({ params }: { params: { id: string 
             인증완료
           </Button>
         ) : (
-          <Link href={`/groups/${params.id}/posts/create`}>
+          <Link href={`/groups/${id}/posts/create`}>
             <Button variant="primary" size="sm">
               <Plus className="mr-2 h-4 w-4" />
               인증하기

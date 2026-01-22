@@ -47,7 +47,7 @@ export default async function GroupsPage() {
         {session && (
           <div className="flex gap-2">
             <Link href="/groups/explore">
-              <Button variant="outline" size="sm">
+              <Button variant="secondary" size="sm">
                 <Search className="mr-2 h-4 w-4" />
                 그룹 탐색
               </Button>
@@ -83,7 +83,7 @@ export default async function GroupsPage() {
                 <p className="text-text-secondary">아직 참여중인 그룹이 없습니다.</p>
                 <div className="mt-4 flex justify-center gap-2">
                   <Link href="/groups/explore">
-                    <Button variant="outline" size="sm">
+                    <Button variant="secondary" size="sm">
                       <Search className="mr-2 h-4 w-4" />
                       그룹 탐색
                     </Button>

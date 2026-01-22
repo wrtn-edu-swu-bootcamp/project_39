@@ -10,11 +10,12 @@ import CommunityCommentForm from '@/components/features/community/CommunityComme
 import CommunityComments from '@/components/features/community/CommunityComments'
 import CommunityLikeButton from '@/components/features/community/CommunityLikeButton'
 
-export default async function CommunityPostDetailPage({ params }: { params: { id: string } }) {
+export default async function CommunityPostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
+  const { id } = await params
 
   const post = await db.communityPost.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       author: {
         select: {

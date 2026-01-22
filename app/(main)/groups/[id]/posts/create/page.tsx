@@ -4,14 +4,15 @@ import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
 import PostCreateForm from '@/components/features/posts/PostCreateForm'
 
-export default async function CreatePostPage({ params }: { params: { id: string } }) {
+export default async function CreatePostPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   if (!session) {
     redirect('/login')
   }
+  const { id } = await params
 
   const group = await db.group.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       members: {
         where: {
@@ -29,7 +30,7 @@ export default async function CreatePostPage({ params }: { params: { id: string 
   const isMember = group.members.length > 0
 
   if (!isMember) {
-    redirect(`/groups/${params.id}`)
+    redirect(`/groups/${id}`)
   }
 
   // 오늘 이미 인증했는지 확인
@@ -40,7 +41,7 @@ export default async function CreatePostPage({ params }: { params: { id: string 
 
   const todayPost = await db.post.findFirst({
     where: {
-      groupId: params.id,
+      groupId: id,
       authorId: session.user.id,
       postedAt: {
         gte: today,
@@ -53,7 +54,7 @@ export default async function CreatePostPage({ params }: { params: { id: string 
   return (
     <div className="container mx-auto p-4">
       <h1 className="mb-6 text-2xl font-bold">인증하기</h1>
-      <PostCreateForm groupId={params.id} hasPostedToday={!!todayPost} />
+      <PostCreateForm groupId={id} hasPostedToday={!!todayPost} />
     </div>
   )
 }

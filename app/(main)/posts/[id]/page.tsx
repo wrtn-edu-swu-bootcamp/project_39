@@ -9,14 +9,15 @@ import Image from 'next/image'
 import PostCommentForm from '@/components/features/posts/PostCommentForm'
 import PostComments from '@/components/features/posts/PostComments'
 
-export default async function PostDetailPage({ params }: { params: { id: string } }) {
+export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
   if (!session) {
     redirect('/login')
   }
+  const { id } = await params
 
   const post = await db.post.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       author: {
         select: {

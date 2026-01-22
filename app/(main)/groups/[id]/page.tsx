@@ -8,11 +8,12 @@ import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
 import GroupJoinButton from '@/components/features/groups/GroupJoinButton'
 
-export default async function GroupDetailPage({ params }: { params: { id: string } }) {
+export default async function GroupDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions)
+  const { id } = await params
 
   const group = await db.group.findUnique({
-    where: { id: params.id },
+    where: { id },
     include: {
       creator: {
         select: {
@@ -55,7 +56,7 @@ export default async function GroupDetailPage({ params }: { params: { id: string
 
     const todayPosts = await db.post.findMany({
       where: {
-        groupId: params.id,
+        groupId: id,
         postedAt: {
           gte: today,
           lt: tomorrow,

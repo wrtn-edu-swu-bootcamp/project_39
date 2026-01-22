@@ -33,7 +33,7 @@ export default async function LoginPage() {
         </div>
 
         <form action="/groups" method="get">
-          <Button type="submit" variant="outline" className="w-full" size="lg">
+          <Button type="submit" variant="secondary" className="w-full" size="lg">
             비회원으로 둘러보기
           </Button>
         </form>

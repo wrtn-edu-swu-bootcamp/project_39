@@ -28,7 +28,7 @@ export default function GuestBanner() {
           </p>
         </div>
         <Button
-          variant="ghost"
+          variant="text"
           size="sm"
           className="ml-4 h-auto p-1"
           onClick={() => setIsVisible(false)}
