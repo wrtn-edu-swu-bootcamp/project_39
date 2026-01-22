@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -43,7 +42,11 @@ export default async function CommunityPostDetailPage({ params }: { params: Prom
               userId: session.user.id,
             },
           }
-        : false,
+        : {
+            where: {
+              id: 'never-match',
+            },
+          },
     },
   })
 
@@ -51,7 +54,7 @@ export default async function CommunityPostDetailPage({ params }: { params: Prom
     return <div className="container mx-auto p-4">게시물을 찾을 수 없습니다.</div>
   }
 
-  const isLiked = session && post.likes && post.likes.length > 0
+  const isLiked = session && Array.isArray(post.likes) && post.likes.length > 0
 
   return (
     <div className="container mx-auto p-4">

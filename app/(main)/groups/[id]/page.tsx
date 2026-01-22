@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { db } from '@/lib/db'
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { formatDate } from '@/lib/utils'
 import Link from 'next/link'
+import Image from 'next/image'
 import GroupJoinButton from '@/components/features/groups/GroupJoinButton'
 
 export default async function GroupDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -84,7 +84,7 @@ export default async function GroupDetailPage({ params }: { params: Promise<{ id
       <Card className="mb-6">
         {group.imageUrl && (
           <div className="relative h-64 w-full overflow-hidden rounded-t-lg">
-            <img src={group.imageUrl} alt={group.name} className="h-full w-full object-cover" />
+            <Image src={group.imageUrl} alt={group.name} fill className="object-cover" />
           </div>
         )}
         <CardHeader>

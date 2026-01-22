@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Plus } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { formatRelativeTime } from '@/lib/utils'
+import Image from 'next/image'
 import CommunityLikeButton from '@/components/features/community/CommunityLikeButton'
 
 export default async function CommunityPage() {
@@ -51,7 +52,13 @@ export default async function CommunityPage() {
               },
             },
           }
-        : {}),
+        : {
+            likes: {
+              where: {
+                id: 'never-match',
+              },
+            },
+          }),
     },
     orderBy: { createdAt: 'desc' },
     take: 20,
@@ -104,18 +111,21 @@ export default async function CommunityPage() {
                   </Link>
                   {post.imageUrl && (
                     <Link href={`/community/${post.id}`}>
-                      <img
-                        src={post.imageUrl}
-                        alt=""
-                        className="mt-4 h-48 w-full rounded-lg object-cover cursor-pointer"
-                      />
+                      <div className="relative mt-4 h-48 w-full overflow-hidden rounded-lg">
+                        <Image
+                          src={post.imageUrl}
+                          alt=""
+                          fill
+                          className="object-cover cursor-pointer"
+                        />
+                      </div>
                     </Link>
                   )}
                   <div className="mt-4 flex items-center gap-4">
                     {session ? (
                       <CommunityLikeButton
                         postId={post.id}
-                        initialLiked={post.likes && post.likes.length > 0}
+                        initialLiked={Array.isArray(post.likes) && post.likes.length > 0}
                         initialLikeCount={post.likeCount}
                       />
                     ) : (

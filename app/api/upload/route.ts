@@ -48,17 +48,21 @@ export async function POST(request: Request) {
     const url = `/uploads/${filename}`
 
     return NextResponse.json({ success: true, url })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Upload error:', error)
+    const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류'
+    const errorCode = (error as { code?: string })?.code
+    const errorStack = error instanceof Error ? error.stack : undefined
+    
     console.error('Error details:', {
-      message: error?.message,
-      code: error?.code,
-      stack: error?.stack,
+      message: errorMessage,
+      code: errorCode,
+      stack: errorStack,
     })
     
     return NextResponse.json({ 
-      error: error?.message || '이미지 업로드 중 오류가 발생했습니다',
-      details: process.env.NODE_ENV === 'development' ? error?.message : undefined
+      error: errorMessage || '이미지 업로드 중 오류가 발생했습니다',
+      details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
     }, { status: 500 })
   }
 }

@@ -61,34 +61,39 @@ export async function POST(request: Request) {
     })
 
     return NextResponse.json({ success: true, userId: user.id })
-  } catch (error: any) {
+  } catch (error) {
     console.error('Signup error:', error)
+    const errorMessage = error instanceof Error ? error.message : '알 수 없는 오류'
+    const errorCode = (error as { code?: string })?.code
+    const errorMeta = (error as { meta?: unknown })?.meta
+    const errorStack = error instanceof Error ? error.stack : undefined
+    
     console.error('Error details:', {
-      message: error?.message,
-      code: error?.code,
-      meta: error?.meta,
-      stack: error?.stack,
+      message: errorMessage,
+      code: errorCode,
+      meta: errorMeta,
+      stack: errorStack,
     })
     
     // Prisma 에러 처리
-    if (error?.code === 'P2002') {
+    if (errorCode === 'P2002') {
       return NextResponse.json({ error: '이미 존재하는 아이디입니다' }, { status: 400 })
     }
     
-    if (error?.code === 'P2003') {
+    if (errorCode === 'P2003') {
       return NextResponse.json({ error: '데이터베이스 제약 조건 오류가 발생했습니다' }, { status: 400 })
     }
     
     // 데이터베이스 연결 오류
-    if (error?.message?.includes('permission denied')) {
+    if (errorMessage.includes('permission denied')) {
       return NextResponse.json({ 
         error: '데이터베이스 권한 오류가 발생했습니다. 관리자에게 문의하세요.' 
       }, { status: 500 })
     }
     
     return NextResponse.json({ 
-      error: error?.message || '회원가입 중 오류가 발생했습니다',
-      details: process.env.NODE_ENV === 'development' ? error?.message : undefined
+      error: errorMessage || '회원가입 중 오류가 발생했습니다',
+      details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
     }, { status: 500 })
   }
 }

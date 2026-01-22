@@ -6,12 +6,28 @@ import Link from 'next/link'
 import { Plus, Search } from 'lucide-react'
 import GroupCard from '@/components/features/groups/GroupCard'
 import { Card, CardContent } from '@/components/ui/card'
+import { Prisma } from '@prisma/client'
+
+type GroupWithRelations = Prisma.GroupGetPayload<{
+  include: {
+    creator: {
+      select: {
+        id: true
+        nickname: true
+        profileImageUrl: true
+      }
+    }
+    members: {
+      where: { status: 'ACTIVE' }
+    }
+  }
+}>
 
 export default async function GroupsPage() {
   const session = await getServerSession(authOptions)
 
   // 참여중인 그룹만 가져오기
-  let myGroups: any[] = []
+  let myGroups: GroupWithRelations[] = []
   if (session) {
     const groupMemberships = await db.groupMember.findMany({
       where: {
