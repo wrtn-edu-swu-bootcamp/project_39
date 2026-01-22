@@ -10,18 +10,30 @@ import bcrypt from 'bcryptjs'
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db),
   providers: [
-    KakaoProvider({
-      clientId: process.env.KAKAO_CLIENT_ID || '',
-      clientSecret: process.env.KAKAO_CLIENT_SECRET || '',
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    }),
-    NaverProvider({
-      clientId: process.env.NAVER_CLIENT_ID || '',
-      clientSecret: process.env.NAVER_CLIENT_SECRET || '',
-    }),
+    ...(process.env.KAKAO_CLIENT_ID && process.env.KAKAO_CLIENT_SECRET
+      ? [
+          KakaoProvider({
+            clientId: process.env.KAKAO_CLIENT_ID,
+            clientSecret: process.env.KAKAO_CLIENT_SECRET,
+          }),
+        ]
+      : []),
+    ...(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+      ? [
+          GoogleProvider({
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          }),
+        ]
+      : []),
+    ...(process.env.NAVER_CLIENT_ID && process.env.NAVER_CLIENT_SECRET
+      ? [
+          NaverProvider({
+            clientId: process.env.NAVER_CLIENT_ID,
+            clientSecret: process.env.NAVER_CLIENT_SECRET,
+          }),
+        ]
+      : []),
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
