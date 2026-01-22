@@ -9,8 +9,10 @@ import { formatDate } from '@/lib/utils'
 
 export default async function JourneyPage() {
   const session = await getServerSession(authOptions)
+  
   if (!session) {
     redirect('/login')
+    return null // redirect는 throw하지만 타입 안전성을 위해
   }
 
   const user = await db.user.findUnique({

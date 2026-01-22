@@ -4,16 +4,6 @@ import bcrypt from 'bcryptjs'
 
 export async function POST(request: Request) {
   try {
-    // 데이터베이스 연결 테스트
-    try {
-      await db.$connect()
-    } catch (dbError) {
-      console.error('Database connection error:', dbError)
-      return NextResponse.json({ 
-        error: '데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.' 
-      }, { status: 503 })
-    }
-
     const { email, password, nickname } = await request.json()
 
     if (!email || !password || !nickname) {
@@ -84,8 +74,20 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: '데이터베이스 제약 조건 오류가 발생했습니다' }, { status: 400 })
     }
     
-    // 데이터베이스 연결 오류
-    if (errorMessage.includes('permission denied')) {
+    // 데이터베이스 연결 오류 처리
+    if (errorMessage.includes('Can\'t reach database server') || 
+        errorMessage.includes('Connection') ||
+        errorMessage.includes('timeout') ||
+        errorMessage.includes('ECONNREFUSED') ||
+        errorCode === 'P1001') {
+      console.error('Database connection failed:', errorMessage)
+      return NextResponse.json({ 
+        error: '데이터베이스 연결에 실패했습니다. 잠시 후 다시 시도해주세요.',
+        details: process.env.NODE_ENV === 'development' ? errorMessage : undefined
+      }, { status: 503 })
+    }
+    
+    if (errorMessage.includes('permission denied') || errorCode === 'P2003') {
       return NextResponse.json({ 
         error: '데이터베이스 권한 오류가 발생했습니다. 관리자에게 문의하세요.' 
       }, { status: 500 })
