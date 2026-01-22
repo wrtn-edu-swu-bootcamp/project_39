@@ -3,13 +3,12 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 
 export default async function Home() {
-  try {
-    const session = await getServerSession(authOptions)
-    // 세션 여부와 관계없이 groups로 리다이렉트
+  const session = await getServerSession(authOptions)
+
+  if (session) {
     redirect('/groups')
-  } catch (error) {
-    // 세션 가져오기 실패 시에도 groups로 리다이렉트
-    console.error('세션 가져오기 오류:', error)
+  } else {
+    // 비회원 모드로도 시작할 수 있도록 groups로 리다이렉트
     redirect('/groups')
   }
 }
